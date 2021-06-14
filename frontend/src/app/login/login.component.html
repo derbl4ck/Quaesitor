@@ -1,0 +1,44 @@
+<nb-layout windowMode>
+    <nb-layout-column>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <nb-card class="dialog-card">
+                        <nb-card-header>
+                            <h1>Willkommen bei der Personensuche!</h1>
+                        </nb-card-header>
+                        <nb-card-body>
+                            <nb-alert status="warning" *ngIf="input_errors" class="big-alert col-8">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+                                    </div>
+                                    <div class="col-11">
+                                        <strong>Bitte prüfen Sie Ihre Eingaben!</strong><br>
+                                        <i [innerHTML]="input_errors" class="text-white"></i>
+                                    </div>
+                                </div>
+                            </nb-alert>
+
+                            <p class="sub-title">Um fortfahren zu können, wähle bitte einen Nutzernamen aus, mit dem Deine live-gesammelten Daten verknüpft werden sollen. Du kannst einen neuen Namen wählen oder mit einem bestehenden fortfahren.</p>
+                            <nb-select placeholder="Nutzernamen wählen" [(selected)]="selectedItem" fullWidth class="mb-2">
+                                <nb-option value="">Neuen Nutzernamen auswählen</nb-option>
+                                <nb-option *ngFor="let item of availableClientIds;" [value]="item">{{ item }}</nb-option>
+                            </nb-select>
+                            <nb-form-field *ngIf="selectedItem === ''">
+                                <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+                                <input type="text" [(ngModel)]="username" placeholder="Max" nbInput>
+                            </nb-form-field>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <button (click)="saveUsername()" status="primary" nbButton>Nutzernamen wählen</button>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+            </div>
+        </div>
+    </nb-layout-column>
+    <nb-layout-footer fixed>
+        <ngx-footer></ngx-footer>
+    </nb-layout-footer>
+</nb-layout>

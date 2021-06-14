@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-lg-8">
+        <code class="text-hint">
+            Die Suche wurde vor {{ metadata.created | dateAgo }} erstellt.<br>
+            searchId: {{ searchId }}
+        </code>
+        <h1>
+            Aktueller Suchfortschritt
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </h1>
+        <p class="col-10">Sobald die Suche abgeschlossen ist, wird automatisch zur Zusammenfassung navigiert.</p>
+        <br><br>
+    </div>
+    <div class="col-lg-4 my-auto">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Anzahl der Erwartungswert-Attribute
+                <span class="badge badge-primary badge-pill">{{ metadata.attributes }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Anzahl der eingesetzten Scraper
+                <span class="badge badge-primary badge-pill">{{ metadata.scrapers }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Gefundene ResultItems
+                <span class="badge badge-primary badge-pill">{{ metadata.resultItems }}</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row" *ngIf="(pageDataError$ | async) as error">
+    <nb-alert status="danger" *ngIf="error" class="big-alert col-8">
+        <div class="row">
+            <div class="col-1">
+                <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+            </div>
+            <div class="col-11">
+                <strong>Ein Fehler ist aufgetreten!</strong><br>
+                <i class="text-white">{{ error.error | json }}</i>
+            </div>
+        </div>
+    </nb-alert>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <nb-card>
+            <nb-card-header>Suchergebnisse als Graph</nb-card-header>
+            <nb-card-body>
+                <div class="result-container-small">
+                    <ngx-graph autoCenter="true" layout="d3ForceDirected" [links]="links" [nodes]="nodes"></ngx-graph>
+                </div>
+            </nb-card-body>
+        </nb-card>
+        <nb-card>
+            <nb-card-header>Fehler <span *ngIf="scraperErrors.length > 0">({{scraperErrors.length}})</span></nb-card-header>
+            <nb-card-body>
+                <div class="result-container-small">
+                    <nb-list>
+                        <nb-list-item *ngFor="let scraperError of scraperErrors">
+                            <div class="row">
+                                <div class="col-md-3">{{scraperError.scraperGroup}}/<b>{{scraperError.scraperName}}</b> <br><small><i>Scraper</i></small>
+                                </div>
+                                <div class="col-md-9">
+                                    <small>{{scraperError.errorText}}</small>
+                                </div>
+                            </div>
+                        </nb-list-item>
+                    </nb-list>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-lg-6">
+        <nb-card>
+            <nb-card-header>Bilder ({{ images?.length }})</nb-card-header>
+            <nb-card-body>
+                <div class="result-container">
+                    <t3200-grid-gallery [images]="images" cols.xs="1" cols.sm="2" cols.md="3" cols.lg="4" cols.xl="6"></t3200-grid-gallery>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

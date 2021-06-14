@@ -1,0 +1,14 @@
+<nb-card>
+    <nb-card-body>
+        <form>
+            <div class="row">
+                <div class="col-md-3 my-auto">
+                    <label class="label">{{sectionName}}</label>
+                </div>
+                <div class="col-md-3" *ngFor="let item of inputs | keyvalue: unsorted">
+                    <input type="text" nbInput fullWidth [(ngModel)]="expectedDto[item.key]" [name]="item.key" placeholder="{{item.value}}" nbTooltip="Attribut '{{item.key}}'" nbTooltipPlacement="top">
+                </div>
+            </div>
+        </form>
+    </nb-card-body>
+</nb-card>

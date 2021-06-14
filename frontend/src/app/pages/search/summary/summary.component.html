@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-lg-8">
+        <code class="text-hint">
+            {{ metadata.created | dateAgo }} wurde die Suche erstellt.<br>
+            searchId: {{ searchId }}
+        </code>
+        <h1>Suchzusammenfassung</h1>
+        <p class="col-10">Anhand der Regeln 1-4 wurde versucht, korrekte Daten zu finden. Die Ergebnisse werden nach wenigen Sekunden angezeigt.</p>
+        <br><br>
+    </div>
+</div>
+
+<div class="row" *ngIf="(pageDataError$ | async) as error">
+    <nb-alert status="danger" *ngIf="error" class="big-alert col-8">
+        <div class="row">
+            <div class="col-1">
+                <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+            </div>
+            <div class="col-11">
+                <strong>Ein Fehler ist aufgetreten!</strong><br>
+                <i class="text-white">{{ error.error | json }}</i>
+            </div>
+        </div>
+    </nb-alert>
+</div>
+
+<div class="row">
+    <div class="col-lg-6" *ngIf="resultSet">
+        <nb-card *ngFor="let item of resultSet | keyvalue: unsorted">
+            <nb-card-body>
+                <form>
+                    <div class="row">
+                        <div class="col-md-3 my-auto">
+                            <label class="label">{{item.key}}</label>
+                        </div>
+                        <div class="col-md-9" *ngIf="item.value.length === 1">
+                            <input type="text" nbInput fullWidth nbTooltip="Attribut '{{item.key}}'" nbTooltipPlacement="top" [value]="item.value[0]">
+                        </div>
+                        <div class="col-md-9" *ngIf="item.value.length > 1">
+                            <nb-select placeholder="Case 4! Bitte einen passenden Wert wählen" fullWidth class="mb-2">
+                                <nb-option *ngFor="let value of item.value;" [value]="value">{{ value }}</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                </form>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-lg-6">
+        <nb-card>
+            <nb-card-header>Bilder ({{ images?.length }})</nb-card-header>
+            <nb-card-body>
+                <div class="result-container">
+                    <t3200-grid-gallery [images]="images" cols.xs="1" cols.sm="2" cols.md="3" cols.lg="4" cols.xl="6"></t3200-grid-gallery>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

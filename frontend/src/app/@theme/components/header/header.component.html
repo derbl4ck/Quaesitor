@@ -1,0 +1,27 @@
+<div class="header-container">
+    <div class="logo-container">
+        <a class="logo">DHBW T3200</a>
+    </div>
+    <nb-actions size="small">
+        <nb-action class="control-item">
+            <nb-icon icon="home-outline" class="ml-2 mr-2"></nb-icon>
+            <a [routerLink]="['/']" href="#" class="text-decoration-none">Suchverlauf</a>
+        </nb-action>
+        <nb-action class="control-item">
+            <nb-icon icon="book-open-outline" class="mr-2"></nb-icon>
+            <a href="https://gitlab.com/lukas.berwanger/dhbw-t3200" class="text-decoration-none">Zur Dokumentation</a>
+        </nb-action>
+    </nb-actions>
+</div>
+
+<div class="header-container">
+    <nb-actions size="small">
+        <nb-action class="control-item" *ngIf="username && !userPictureOnly">
+            <nb-icon icon="person-outline" class="ml-4 mr-2"></nb-icon>
+            <span>{{ username }}</span>
+        </nb-action>
+        <nb-action class="control-item" *ngIf="username">
+            <a (click)="logoutUser()" class="text-decoration-none" href="#">Ausloggen</a>
+        </nb-action>
+    </nb-actions>
+</div>

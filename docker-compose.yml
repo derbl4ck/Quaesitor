@@ -1,0 +1,35 @@
+services:
+  neo4j:
+    # image: neo4j/neo4j-arm64-experimental:4.2.5-arm64 # apple m1 users
+    image: neo4j:latest
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_dbms_shell_enabled=true
+      - NEO4J_AUTH=neo4j/test
+  bullmq-redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  scraper_html:
+    build: ./scraper/html/
+    links:
+        - bullmq-redis
+  scraper_api:
+    build: ./scraper/api/
+    links:
+        - bullmq-redis
+  api:
+    build: ./api/
+    links:
+        - bullmq-redis
+        - neo4j
+    ports:
+      - "3000:3000"
+  frontend:
+    build: ./frontend/
+    ports:
+      - "80:80"

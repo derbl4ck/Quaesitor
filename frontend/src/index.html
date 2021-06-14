@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>T3200 - Erstellung von Persönlichkeitsprofilen im Internet durch Big Data</title>
+
+    <base href="/">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpVhQiwAllg1RAFaxMWSpQruuGARy0Y1k&libraries=places"></script>
+</head>
+
+<body>
+    <ngx-app></ngx-app>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        #nb-global-spinner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        #nb-global-spinner:after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -0.25em;
+        }
+
+        #nb-global-spinner .content {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: left;
+            font-size: 0;
+        }
+
+        #nb-global-spinner .loader-circle {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px rgba(100, 100, 100, 0.1);
+            margin-left: -75px;
+            margin-top: -75px;
+        }
+
+        #nb-global-spinner .loader-line-mask {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 75px;
+            height: 150px;
+            margin-left: -75px;
+            margin-top: -75px;
+            overflow: hidden;
+            -webkit-transform-origin: 75px 75px;
+            -moz-transform-origin: 75px 75px;
+            -ms-transform-origin: 75px 75px;
+            -o-transform-origin: 75px 75px;
+            transform-origin: 75px 75px;
+            -webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
+            -webkit-animation: rotate 1.2s infinite linear;
+            -moz-animation: rotate 1.2s infinite linear;
+            -o-animation: rotate 1.2s infinite linear;
+            animation: rotate 1.2s infinite linear;
+        }
+
+        #nb-global-spinner .loader-line-mask .loader-line {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px #00205b;
+        }
+
+        #nb-global-spinner p {
+            color: #ccc;
+            font-size: 36px;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            margin-top: 200px;
+            text-align: center;
+        }
+
+        @-webkit-keyframes rotate {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @-moz-keyframes rotate {
+            0% {
+                -moz-transform: rotate(0deg);
+            }
+            100% {
+                -moz-transform: rotate(360deg);
+            }
+        }
+
+        @-o-keyframes rotate {
+            0% {
+                -o-transform: rotate(0deg);
+            }
+            100% {
+                -o-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <div id="nb-global-spinner" class="spinner">
+        <div class="content">
+            <div class="loader-circle"></div>
+            <div class="loader-line-mask">
+                <div class="loader-line"></div>
+            </div>
+            <img width="100" src="./assets/images/logo.png" alt="DHBW">
+            <p>Die Oberfläche wird geladen...</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<nb-card class="dialog-card">
+    <nb-card-header>
+        <h1>Suchverlauf</h1>
+        <button (click)="newSearch()" status="primary" class="pull-right" nbButton>Neue Suche</button>
+        <br>
+        <p class="col-8">Nachfolgend sind die zuletzt gestarteten Suchanfragen einsehbar. Alternativ kann auch eine neue Suchanfrage gestartet werden.</p>
+    </nb-card-header>
+    <nb-card-body>
+        <ng-template #loadingOrError>
+            <div class="row" *ngIf="(pageDataError$ | async) as error; else loading">
+                <nb-alert status="danger" *ngIf="error" class="big-alert col-8">
+                    <div class="row">
+                        <div class="col-1">
+                            <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+                        </div>
+                        <div class="col-11">
+                            <strong>Ein Fehler ist aufgetreten!</strong><br>
+                            <i class="text-white">{{ error.error | json }}</i>
+                        </div>
+                    </div>
+                </nb-alert>
+            </div>
+            <ng-template #loading>
+                Einträge werden geladen...
+            </ng-template>
+        </ng-template>
+
+        <ng-container *ngIf="(pageDataObserver | async) as result; else loadingOrError">
+            <span *ngIf="result.length == 0">Bisher sind keine Suchen bekannt.</span>
+            <table *ngIf="result.length > 0">
+                <thead>
+                    <tr>
+                        <th>ID <br>Datum</th>
+                        <th>Name</th>
+                        <th>Erwartungswert Attribute</th>
+                        <th>Treffer</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of result ">
+                        <td>
+                            <label class="label col-form-label">{{ entry.searchId }},<br><i>{{ entry.created | dateAgo }}</i></label>
+                        </td>
+                        <td><span *ngIf="entry['schema.org:givenName']">{{ entry['schema.org:givenName'] }},</span> {{ entry['schema.org:familyName'] }}</td>
+                        <td>{{ entry.expected }}</td>
+                        <td>{{ entry.hits }}</td>
+                        <td>
+                            <nb-icon icon="search-outline" class="mr-2"></nb-icon>
+                            <a [routerLink]="['../' + entry.searchId]" class="action-link text-decoration-none">Ansehen</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </nb-card-body>
+</nb-card>

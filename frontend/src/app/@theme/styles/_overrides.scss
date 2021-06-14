@@ -1,0 +1,142 @@
+@import './themes';
+@mixin nb-overrides() {
+    nb-select.size-medium button {
+        padding: 0.4375rem 2.2rem 0.4375rem 1.125rem !important;
+        nb-icon {
+            right: 0.41rem !important;
+        }
+    }
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #505d6f;
+}
+
+.pull-right {
+    float: right;
+}
+
+.big-alert {
+    max-width: 100%;
+    nb-icon {
+        font-size: 2.25rem !important;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    &[status=warning]>.row {
+        color: #fff;
+        background-color: #fa0;
+        border-radius: 0.25rem;
+        .col-11 {
+            padding: 1rem 0.9rem 1rem;
+        }
+    }
+    &[status=danger]>.row {
+        color: #fff;
+        background-color: #dc3545;
+        border-radius: 0.25rem;
+        .col-11 {
+            padding: 1rem 0.9rem 1rem;
+        }
+    }
+}
+
+.nb-theme-default nb-layout .layout {
+    background-color: inherit !important;
+}
+
+.nb-theme-default nb-tooltip nb-icon:not(:only-child) {
+    width: 5rem !important;
+    height: 5rem !important;
+}
+
+[dir=ltr] .nb-theme-default .nb-form-field-control-with-prefix nb-select.appearance-outline.size-medium .select-button {
+    padding-bottom: 7px !important;
+    padding-left: 40px !important;
+    padding-right: 32px !important;
+    padding-top: 7px !important;
+}
+
+.logo-container>a.logo {
+    border-left: none !important;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: rgba(34, 43, 69, 0.45);
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.separator::before {
+    margin-right: 0.45em;
+}
+
+.separator::after {
+    margin-left: 0.45em;
+}
+
+
+/* Datatables */
+
+table {
+    line-height: 1.5em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+}
+
+table thead tr {
+    background: #f7f9fc;
+    border-bottom: 3px solid #d9dee4;
+}
+
+table tr th {
+    padding: 0.875rem 1.25rem;
+    padding-right: 1.75rem;
+}
+
+table tr td,
+table tr th {
+    position: relative;
+    padding: 0.875rem 1.25rem;
+    margin: 0;
+    border: 1px solid #edf1f7;
+    vertical-align: middle;
+}
+
+table tr td,
+table tr th,
+table tr th a {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: #222b45;
+}
+
+table tbody tr:nth-child(2n) {
+    background-color: #f7f9fc;
+}

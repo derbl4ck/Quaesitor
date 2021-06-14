@@ -1,0 +1,44 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+     ::ng-deep router-outlet+* {
+        display: block;
+        animation: fade 1s;
+        @keyframes fade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+h1 {
+    code {
+        font-size: 1rem;
+    }
+    .spinner-border {
+        font-size: 0.75rem;
+        color: #8f9bb3;
+        vertical-align: middle;
+    }
+}
+
+nb-stepper button {
+    margin-right: 1rem;
+    margin-top: 3rem;
+}
+
+.result-container {
+    height: 700px;
+}
+
+.result-container-small {
+    height: 350px;
+}
+
+.list-group-item {
+    background: none;
+    border: none;
+}

@@ -1,0 +1,212 @@
+stages: [test, publish, deploy]
+
+# Testing stage
+task:test:api:
+  stage: test
+  only:
+    changes:
+      - code/api/**/*
+  image: node:alpine
+  before_script:
+    - cd code/api
+    - npm install
+  script: npm run lint
+
+task:test:scraper-api:
+  stage: test
+  only:
+    changes:
+      - code/scraper/api/**/*
+  image: node:alpine
+  before_script:
+    - cd code/scraper/api
+    - npm install
+  script: npm run lint
+
+task:test:scraper-html:
+  stage: test
+  only:
+    changes:
+      - code/scraper/html/**/*
+  image: node:alpine
+  before_script:
+    - cd code/scraper/html
+    - npm install
+  script: npm run lint
+
+# task:test:frontend:
+#  stage: test
+#  only:
+#    changes:
+#      - code/frontend/**/*
+#  image: node:lts
+#  before_script:
+#    - cd code/frontend
+#    - npm install
+#  script: npm run lint:ci
+
+# Publish Container-Image stage
+task:publish:api:
+  stage: publish
+  image: google/cloud-sdk:latest
+  when: on_success
+  only:
+    changes:
+      - code/api/**/*
+  services:
+    - docker:dind
+  tags:
+    - docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud auth configure-docker
+  script:
+    - cd code/api
+    - docker build --compress -t eu.gcr.io/dhbw-t3200/api:latest .
+    - docker push eu.gcr.io/dhbw-t3200/api:latest
+    - docker image rm -f eu.gcr.io/dhbw-t3200/api:latest
+
+task:publish:scraper-api:
+  stage: publish
+  image: google/cloud-sdk:latest
+  when: on_success
+  only:
+    changes:
+      - code/scraper/api/**/*
+  services:
+    - docker:dind
+  tags:
+    - docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud auth configure-docker
+  script:
+    - cd code/scraper/api
+    - docker build --compress -t eu.gcr.io/dhbw-t3200/scraper-api:latest .
+    - docker push eu.gcr.io/dhbw-t3200/scraper-api:latest
+    - docker image rm -f eu.gcr.io/dhbw-t3200/scraper-api:latest
+
+task:publish:scraper-html:
+  stage: publish
+  image: google/cloud-sdk:latest
+  when: on_success
+  only:
+    changes:
+      - code/scraper/html/**/*
+  services:
+    - docker:dind
+  tags:
+    - docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud auth configure-docker
+  script:
+    - cd code/scraper/html
+    - docker build --compress -t eu.gcr.io/dhbw-t3200/scraper-html:latest .
+    - docker push eu.gcr.io/dhbw-t3200/scraper-html:latest
+    - docker image rm -f eu.gcr.io/dhbw-t3200/scraper-html:latest
+
+task:publish:frontend:
+  stage: publish
+  image: google/cloud-sdk:latest
+  when: on_success
+  only:
+    changes:
+      - code/frontend/**/*
+  services:
+    - docker:dind
+  tags:
+    - docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud auth configure-docker
+  script:
+    - cd code/frontend
+    - docker build --compress -t eu.gcr.io/dhbw-t3200/frontend:latest .
+    - docker push eu.gcr.io/dhbw-t3200/frontend:latest
+    - docker image rm -f eu.gcr.io/dhbw-t3200/frontend:latest
+
+# Deploy Container-Image in k8s cluster stage
+task:deploy:api:
+  stage: deploy
+  only:
+    changes:
+      - code/api/**/*
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud config set project dhbw-t3200
+    - gcloud config set compute/zone europe-west1
+    - gcloud container clusters get-credentials dhbw-t3200
+    - gcloud auth configure-docker
+  script:
+    - kubectl set image deployment/dpl-api api=eu.gcr.io/dhbw-t3200/api:latest
+    - kubectl patch deployment dpl-api -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+
+task:deploy:scraper-api:
+  stage: deploy
+  only:
+    changes:
+      - code/scraper/api/**/*
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud config set project dhbw-t3200
+    - gcloud config set compute/zone europe-west1
+    - gcloud container clusters get-credentials dhbw-t3200
+    - gcloud auth configure-docker
+  script:
+    - kubectl set image deployment/dpl-scraper-api scraper-api=eu.gcr.io/dhbw-t3200/scraper-api:latest
+    - kubectl patch deployment dpl-scraper-api -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+
+task:deploy:scraper-html:
+  stage: deploy
+  only:
+    changes:
+      - code/scraper/html/**/*
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud config set project dhbw-t3200
+    - gcloud config set compute/zone europe-west1
+    - gcloud container clusters get-credentials dhbw-t3200
+    - gcloud auth configure-docker
+  script:
+    - kubectl set image deployment/dpl-scraper-html scraper-html=eu.gcr.io/dhbw-t3200/scraper-html:latest
+    - kubectl patch deployment dpl-scraper-html -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+
+task:deploy:frontend:
+  stage: deploy
+  only:
+    changes:
+      - code/frontend/**/*
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCP_SA_KEY > ./gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+    - gcloud config set project dhbw-t3200
+    - gcloud config set compute/zone europe-west1
+    - gcloud container clusters get-credentials dhbw-t3200
+    - gcloud auth configure-docker
+  script:
+    - kubectl set image deployment/dpl-frontend frontend=eu.gcr.io/dhbw-t3200/frontend:latest
+    - kubectl patch deployment dpl-frontend -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"

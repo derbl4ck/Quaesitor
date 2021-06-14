@@ -1,0 +1,63 @@
+<nb-card class="dialog-card">
+    <nb-card-header>
+        <code class="text-hint" *ngIf="basedOnSearchId">Basierend auf: {{ basedOnSearchId }}</code><br>
+        <code class="text-hint">searchId: {{ searchId }}</code><br>
+        <h1>Erwartungswert</h1>
+        <br>
+        <p class="col-8">In diesem Schritt kann der Erwartungswert für eine neue Suchanfrage angepasst werden. </p>
+    </nb-card-header>
+    <nb-card-body>
+        <nb-alert status="warning" *ngIf="input_errors" class="big-alert col-8">
+            <div class="row">
+                <div class="col-1">
+                    <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+                </div>
+                <div class="col-11">
+                    <strong>Bitte prüfen Sie Ihre Eingaben!</strong><br>
+                    <i [innerHTML]="input_errors" class="text-white"></i>
+                </div>
+            </div>
+        </nb-alert>
+        <div class="row" *ngIf="(pageDataError$ | async) as error">
+            <nb-alert status="danger" *ngIf="error" class="big-alert col-8">
+                <div class="row">
+                    <div class="col-1">
+                        <nb-icon nbSuffix icon="alert-triangle-outline" pack="eva" status="control"></nb-icon>
+                    </div>
+                    <div class="col-11">
+                        <strong>Ein Fehler ist aufgetreten!</strong><br>
+                        <i class="text-white">{{ error.error | json }}</i>
+                    </div>
+                </div>
+            </nb-alert>
+        </div>
+
+        <ng-container>
+            <nb-stepper orientation="horizontal">
+                <nb-step [label]="basedata">
+                    <ng-template #basedata>Stammdaten</ng-template>
+
+                    <t3200-input-row sectionName="Name" [inputs]="inputs.name" [(expectedDto)]="expectedDto"></t3200-input-row>
+                    <t3200-input-row sectionName="Ort" [inputs]="inputs.location" [(expectedDto)]="expectedDto"></t3200-input-row>
+
+                    <button nbButton disabled nbStepperNext>Zurück</button>
+                    <button nbButton nbStepperNext>Weiter</button>
+                </nb-step>
+                <nb-step [label]="socialmedia">
+                    <ng-template #socialmedia>Social Media</ng-template>
+                    <p>TBD</p>
+
+                    <button nbButton nbStepperPrevious>Zurück</button>
+                    <button nbButton nbStepperNext>Weiter</button>
+                </nb-step>
+                <nb-step [label]="interests">
+                    <ng-template #interests>Interessen</ng-template>
+                    <p>TBD</p>
+
+                    <button nbButton nbStepperPrevious>Zurück</button>
+                    <button (click)="startSearch()" type="submit" nbButton status="success">Suche starten</button>
+                </nb-step>
+            </nb-stepper>
+        </ng-container>
+    </nb-card-body>
+</nb-card>
